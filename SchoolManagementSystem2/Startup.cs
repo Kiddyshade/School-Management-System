@@ -13,7 +13,7 @@ namespace SchoolManagementSystem2
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
-            CreateEditRoles();
+            CreateEditRoles(); // function calling
         }
         public void CreateEditRoles()
         {
