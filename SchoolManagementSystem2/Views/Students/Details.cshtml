@@ -1,0 +1,79 @@
+﻿@model SchoolManagementSystem2.Models.Student
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Student</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EnrollmentDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EnrollmentDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MiddleName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MiddleName)
+        </dd>
+    </dl>
+    <table class="table table-condensed table-responsive" >
+        <tr>
+            <td>Course Title</td>
+            <td>Credit</td>
+            <td>Grade</td>
+        </tr>
+        @foreach (var enrollment in Model.Enrollment)//adding Enrollment database because it has access to Course,student database 
+        {
+            <tr>
+                <td>
+                    <p>
+                        @enrollment.Course.Title  @*Generating Title from Course DB*@
+                    </p>
+                </td>
+                <td>
+                    <p>
+                        @enrollment.Course.Credits @*Generating Credit from Course DB*@
+                    </p>
+                </td>
+                <td>
+                    <p>
+                        @enrollment.Grade          @*Generating Grade from Enrollment DB itself*@
+                    </p>
+                </td>
+            </tr>
+       
+               
+           
+        }
+    </table>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.StudentID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
