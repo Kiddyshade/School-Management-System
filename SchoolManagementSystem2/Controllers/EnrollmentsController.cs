@@ -22,6 +22,14 @@ namespace SchoolManagementSystem2.Controllers
             return View(await enrollment.ToListAsync());
         }
 
+        public PartialViewResult _enrollmentPartial(int? CourseID)
+        {
+            var enrollment = db.Enrollment.Where(q=>q.CourseID == CourseID)  //Filteration process
+                .Include(e => e.Course)
+                .Include(e => e.Student);
+            return PartialView(enrollment.ToList());
+        }
+
         // GET: Enrollments/Details/5
         public async Task<ActionResult> Details(int? id)
         {
@@ -64,6 +72,28 @@ namespace SchoolManagementSystem2.Controllers
             ViewBag.StudentID = new SelectList(db.Student, "StudentID", "LastName", enrollment.StudentID);
             ViewBag.LecturerId = new SelectList(db.Lecturers, "Id", "First_Name", enrollment.LecturerId);
             return View(enrollment);
+        }
+
+        [HttpPost]
+
+        public async Task <JsonResult> AddStudent([Bind(Include = "CourseID,StudentID")] Enrollment enrollment)
+        {
+            var isEnrolled = db.Enrollment.Any(q => q.StudentID == enrollment.StudentID && q.CourseID == enrollment.CourseID);
+            try
+            {
+                if (ModelState.IsValid && !isEnrolled)
+                {
+                    db.Enrollment.Add(enrollment);
+                    await db.SaveChangesAsync();
+                    return Json(new { IsSuccess = true, Message = "Student added Successfully" }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(new {IsSuccess = false, Message = "Student not added Successfully" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+
+                return Json(new {IsSuccess = false, Message = "Error: Contact Administrator" }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         // GET: Enrollments/Edit/5
